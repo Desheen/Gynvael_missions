@@ -41,9 +41,9 @@ def extract_equation(data):
 s = requests.session()
 base_url = 'http://gynvael.coldwind.pl/qrmaze/'
 ext = '.png'
-number = 69129246053
+number = 'start'
 
-for i in range(1000):
+for i in range(10000):
     img = download_img(number)
     number = extract_equation(img)
     print("i:" + str(i) + " Number: " + str(number))
