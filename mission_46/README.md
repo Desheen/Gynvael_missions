@@ -7,29 +7,32 @@ In his #46 Stream, There was a mission about barcode decoding.
 
 You can find the Archive Version of the Stream [here](https://youtu.be/PiBfI7wltM8?t=16m9s), and the mission details [here](http://goo.gl/rNHu7b).
 
-![alt text](https://i.imgur.com/JXBYNHT.png)
-Now, Going to the link in the details. it will tell you start with start.png, this link. Its barcode image, lets use one of the online service to read what it say !, you can use this website onlinebarcodereader.com
+![alt text](https://i.imgur.com/JXBYNHT.png).  
+Now, Going to the link that contain details of the mission. start with start.png, this [link](http://gynvael.coldwind.pl/qrmaze/start.png). Its barcode image, lets use one of the online service to read what it say !, you can use this website onlinebarcodereader.com
 
-and there is already a Enter url, where you can enter a url to the barcode image, and then it will decode it for you, here is what is the content.
+and there is already a Enter url option, where you can enter a url to the barcode image, and then it will decode it for you, here is the content of the barcode image. 
 
 `Calc value, add .png, repeat: 84905785,*577,-745,-342,*954,-672,+909,+644,-556,-524,*622`
 
-its simple calculation equation, you can use python to do this.  
+its simple calculation equation, you can use python to solve it.  
 ![alt text](https://i.imgur.com/x7jkxLO.png)
 
-now the result we got the result, lets add .png as its say, http://gynvael.coldwind.pl/qrmaze/29070456023771126.png
+We get a number as a result, lets add .png to it, as the message say, it will look like this: http://gynvael.coldwind.pl/qrmaze/29070456023771126.png
 
-now if you repeat the process, of reading the barcode, you will find a new equation, and so on, i did around ~20 equation, until i realize, that this should be automated, so lets see, how we can do this, first we going to this with python, cuz python make it easy :P.
+its a new image, and you will repeat the process of reading it's content and solve calculation equation, and so on, i did around ~20 iteration, until i realize, that it should be automated, so lets see, how we can do it, we going to this with python, because python rocks :P .
 
-we need a way to download image from the internet, then decode the barcode, then solve the equation.
+We going to need the following:  
+	1. Download an image. 
+	2. Decode the image to get string.
+	3. Parse the string and solve the equation.
 
-im going to use these libraries, but there is always alternative.
+Im going to use these libraries, but there is always alternative:
+	1. Pyzbar
+	2. Pillow
+	3. Requests
 
-1. pyzbar
-2. Pillow
-3. requests
 
-using request, you can simple download an image, or any other file if's matter by:
+By using request, you can simply download an image, or any other file if's matter by:
 
 ```python
 import requests
@@ -40,7 +43,7 @@ for Chunk in img.iter_content(1024):
 img_file.close()
 ```
 
-now, you have an image at  /tmp/barcode.png, lets make a function, because we going to download a lot of images, and we can overwrite the existence one, as its not useful to keep it.
+Now, you have an image at  /tmp/barcode.png, lets make it a function, because we going to download a lot of images, and we can overwrite the existence one, because there is no need to keep it. 
 
 ```python
 import requests
@@ -67,7 +70,7 @@ print(extract_str_from_barcode('tmp_image.png'))
 ```
 
 
-The function extract_str_from_barcode, will return a string, which is another equation, The only missing function for now is a function to solve the equation, Thankful Gynvael formatted it, so its easy to parse it:
+This function extract_str_from_barcode, will return a string, which is another equation, The only missing function for us, is a function to parse & solve the equation, Thankfully Gynvael has made the message properly formatted, so its easy to parse it:
 
 `Calc value, add .png, repeat: 84905785,*577,-745,-342,*954,-672,+909,+644,-556,-524,*622`
 
@@ -97,4 +100,4 @@ def solve_equation(equation):
 
 This function will take Gynvael formatted equation, and solve it and return the next image number.
 
-and that's it actually check `run.py` to see the full code.
+Add those function to a while loop, or for loop, and that's it. check `run.py` to see the full code.
