@@ -14,6 +14,9 @@ unsigned char data[] = {
     0x93, 0xd3, 0x34, 0xfe, 0xe4, 0x5c, 0xca, 0x01,
     0x9d, 0xce, 0x81, 0xf4, 0x21, 0x0f,
 };
+
+// the value in the output array does not matter, because they will be overwritten, most important is the number of element
+// i just copied data array.
 unsigned char output[] = {
     0xfa, 0xa0, 0x3e, 0xe8, 0xf5, 0x19, 0xde, 0x4e,
     0xac, 0x9c, 0x9c, 0xfc, 0x33, 0x6a, 0x4d, 0xae,
@@ -35,21 +38,17 @@ void print_data(int index);
 int main ()
 {
 
-  //decrypt(data, sizeof(data), 1312);
-  //print_data(1312);
-  uint64_t end = 10455;
+  uint64_t end = 5207;
   for(uint64_t i = 0;i <=end;i++)
   {
-    //printf("i:%d\n------------\n\n",i);
     decrypt(data, sizeof(data), i,output);
     print_data(i);
   }
   
-
-
   return 0;
 }
 
+// same as original function, just changing the way it add, just passing the total value of password.
 void derive_key(int password,unsigned char *output_key)
 {
   uint64_t key = 0xf8a45191c23a75be;
@@ -64,11 +63,14 @@ void decrypt(unsigned char *data, size_t sz, int password,unsigned char *output)
   unsigned char result[16];
   derive_key(password, result);
 
+  // you need to keep the data array the same. and save the result in different array.
   for (size_t i = 0; i < sz; i++) {
     output[i] = data[i] ^ result[i % 16];
   }
 }
 
+
+// this will only print of all the element in the output array is printable ( after decrypting )
 void print_data(int index)
 {
   bool printable = true;
@@ -86,6 +88,5 @@ void print_data(int index)
     printf("i:%d - printable: %d\n\n",index,printable);
     puts((char*)output);
   }
-  //
 
 }
