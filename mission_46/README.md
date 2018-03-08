@@ -1,4 +1,3 @@
-# Gynvael_missions #46
 Hello, Everyone.
 
 if you watch Gynvael English (trying to be weekly) Stream, you can find it [here](https://www.youtube.com/channel/UCCkVMojdBWS-JtH7TliWkVg).  
