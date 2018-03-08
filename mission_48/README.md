@@ -4,7 +4,7 @@ if you watch Gynvael English (trying to be weekly) Stream, you can find it [here
 
 In his #48 Stream, There was a mission about derive key.
 
-You can find the Archive Version of the Stream [here](https://www.youtube.com/watch?v=zJw7CuSc8Sg), and the mission details [here](goo.gl/Cio3tV ).
+You can find the Archive Version of the Stream [here](https://www.youtube.com/watch?v=zJw7CuSc8Sg), and the mission details [goo.gl/Cio3tV ](http://goo.gl/Cio3tV ).  
 
 ```
 MISSION 021            goo.gl/Cio3tV               DIFFICULTY: ██████░░░░ [6/10]
@@ -27,7 +27,7 @@ If you tweet about it, include @gynvael to let me know :)
 
 ```
 
-check the code in [goo.gl/nzXX7B](goo.gl/nzXX7B), you will find a c code that have 3 funtions:  
+check the code in [goo.gl/nzXX7B](http://goo.gl/nzXX7B), you will find a c code that have 3 funtions:  
 	1.check_password.  
 	2.derive_key.  
 	3.decrypt the data. 
