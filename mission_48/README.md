@@ -6,6 +6,9 @@ In his #48 Stream, There was a mission about derive key.
 
 You can find the Archive Version of the Stream [here](https://www.youtube.com/watch?v=zJw7CuSc8Sg), and the mission details [goo.gl/Cio3tV ](http://goo.gl/Cio3tV ).  
 
+
+Big shout out to Guest011011, he stay with me in Gynvael English IRC channel in freenode, and we thought a lot about the solution :) haning on IRC and you will meet smart people :).  
+
 ```
 MISSION 021            goo.gl/Cio3tV               DIFFICULTY: ██████░░░░ [6/10]
 ┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅┅
