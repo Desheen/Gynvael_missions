@@ -1,13 +1,14 @@
 Hello, Everyone.
 
-if you watch Gynvael English (trying to be weekly) Stream, you can find it [here](https://www.youtube.com/channel/UCCkVMojdBWS-JtH7TliWkVg).  
+In Gynvael English (trying to be weekly) Stream, you can find it [here](https://www.youtube.com/channel/UCCkVMojdBWS-JtH7TliWkVg).  
 
 In his #48 Stream, There was a mission about derive key.
 
 You can find the Archive Version of the Stream [here](https://www.youtube.com/watch?v=zJw7CuSc8Sg), and the mission details [goo.gl/Cio3tV ](http://goo.gl/Cio3tV ).  
 
 
-Big shout out to Guest011011, he stay with me in Gynvael English IRC channel in freenode, and we thought a lot about the solution :) haning on IRC and you will meet smart people :).  
+Big shout out to Guest011011 , he stayed with me in Gynvael English IRC channel in freenode, and we discussed the mission and we tried to walk our way to solve it, and here is my solution :).  
+
 
 ```
 MISSION 021            goo.gl/Cio3tV               DIFFICULTY: ██████░░░░ [6/10]
@@ -30,39 +31,40 @@ If you tweet about it, include @gynvael to let me know :)
 
 ```
 
-check the code in [goo.gl/nzXX7B](http://goo.gl/nzXX7B), you will find a c code that have 3 funtions:  
+[goo.gl/nzXX7B](http://goo.gl/nzXX7B) opening this link, you will find C code that contain 3 functions:
 	1.check_password.  
 	2.derive_key.  
 	3.decrypt the data. 
 
-check password function take an input and if its not 41 long, then return false.
+The main function simple take an input and call the other functions.  
+The check_password function take an input ( password ) and if its not 41 long, then return false.
 and if you provide a 41 password long, then it will md5 hash it and compare to hash value:
 57d9b1fd2552ff0b8e5aeb18754a9b03
 
-if it doesnt match the hash then return false, or if match ( which is impoissible unless you are gynvael ) then return true.
+if it does not match the hash then return false, or if it's matched ( which is impoissible unless you are gynvael ) then return true.
 
 second function is derive_key, and there is a uint64_t key = 0xf8a45191c23a75be.  
-it will go though that 41 byte password ( 41 character we know that from check password function ) and add each value to this key, and it will hash the total value ( sum of the key and password ) with md5.  
+it will go though that 41 byte password ( 41 character we know that from the if statement in  the check_password function ) and add each value to this key, and it will hash the total value ( sum of the key and password ) with md5.  
 
-finally decrypt, which will xor each element of the data array with 2 hex digit from the key ( 16 byte - 32 hex digit ), the data array has 78 element, but the key is 16 byte long, so that why there is % 16.
+Finally the decrypt function, which will xor each element of the data array with 2 hex digit from the key ( 16 byte - 32 hex digit ), the data array has 78 element, but the key is only 16 byte long, so that's probably why there is % 16.
 
-note that md5_update here take a length, first time in check_password, the length was strlen(password), but in  dervie_key the length is 8 byte only.  
+Note that MD5Update has an argument length, first time in check_password, the length was strlen(password), but in  dervie_key the length is 8 byte only.  
 
-so first i thought because its an md5 hash, i can make collision, so i generate the same hash with different input.  
-but in the derive key function you will have the add ( sum ) the value of the password with the key, so you need exactly the same value of the original key, and knowing that hash is one way function, you can get the same hash value for different input, but having the hash value and even if you know the input lenght, its impossible to get the original input.  
-i spent a couple of hour trying to brute force it, was silly way to get the solution.  
+So first i thought because its an md5 hash, There is possibility that the vulnerability is hash collision, so you try to generate the same hash value from different input.
+But in the derive key function you will have the add ( sum ) the value of the password with the key, so you will need exactly the same value of the original key, and knowing that hash is one way function, you can get the same hash value for different input, but having the hash value and even if you know the input lenght, its impossible to get the original input.  
+I spent a couple of hours trying to brute force it, was silly way to get the solution.  
 
-but if you think about that derive key function, the length in MD5Update is 8 byte, so it will take only 8 byte from the key.( try to play with md5update, declare two string with the same first 8 byte, after the 8 byte but random value, and try to hash them with length of 8 you will find out that they give the same hash ).  
+but if you think about that derive_key function, the length in MD5Update is 8 byte, so it will take only 8 byte from the key.( try to play with MD5Update, declare two string with the same first 8 byte, after the 8th byte put random value, and try to hash them with length of 8 you will find out that they give the same hash ).  
 
-The maximum value of input to decrypt that data iss 0xffffffffffffffff and the minimum value is 0xf8a45191c23a75be ( not really ).  
+The maximum value of input to decrypt that data iss 0xffffffffffffffff ( mathematically speaking ) and the minimum value is 0xf8a45191c23a75be ( not really  ).  
 substracting them from each other will get you: 530209169652156993 which is very big number to iterate through, even with i7 :P.  
 
-so another thing to put into consideration, that the password should be in the printable asci character range, which is from 32(0x20) - 128 (0x80).  ( according to this [page](https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html) )
-so minimum value of the password that we will add to the key is 1312 ( 41 \* 32 ) but most important is the max value 5207 ( 41 * 127 ).  
+So another thing to put into consideration, that the password should be in the printable asci character range, which is from 32(0x20) - 128 (0x80).  ( according to this [page](https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html) )
+So minimum value of the password that we will add to the key is 1312 ( 41 \* 32 ) but most important is the max value 5207 ( 41 * 127 ).  
 
-so i made some changes to the original code, i removed the check_password function ( completely ).  
+I made some changes to the original code, i removed the check_password function ( completely ).  
 
-and this is my modification to dervie key:  
+and this is my modification to dervie_key:  
 ```  
 void derive_key(int password,unsigned char *output_key)
 {
@@ -75,7 +77,7 @@ void derive_key(int password,unsigned char *output_key)
 }
 ```
 
-since we going to add the total value of password to the key, we dont need to loop over the string ( char array if that matter ) anymore.
+Since we going to add the total value of password to the key, we dont need to loop over the string ( char array if that matter ) anymore.
 ```
 // the value in the output array does not matter, because they will be overwritten, most important is the number of element
 // i just copied data array.
@@ -103,8 +105,8 @@ void decrypt(unsigned char *data, size_t sz, int password,unsigned char *output)
 }
 ```
 
-i made an array for the output, so i can put the result into it :) .  
-decrypt is the same but storing the result in output instead of data.  
+Make an array for the output, so we store the result.  
+Decrypt function is the same but storing the result in output instead of data.  
 
 ```
 // this will only print of all the element in the output array is printable ( after decrypting )
@@ -129,8 +131,7 @@ void print_data(int index)
 }
 ```
 
-i made a custom print function, that will make sure to print only the array that all it's element is printable.
-then you just need to loop over:
+i made a custom print function, that will make sure to print only the array that all it's element is in the printable character range, then you just need to loop over:
 ```
   uint64_t end = 5207;
   for(uint64_t i = 0;i <=end;i++)
@@ -140,14 +141,15 @@ then you just need to loop over:
   }
 ```
 
-there is some clean up can be done, but since it's working, doesnt really matter. ( yea lazy way).  
+There is some clean up can be done, but since it's working, doesnt really matter. ( yea lazy way).  
 
-its funny that i was writing email to gynvael, telling him what is the solution after i spent long time trying to solve it, while writing the email and trying to explain my effort to gynvael i found that i have a mistake in the condition of the print function ( i kinda excluded all the right cases :$, yea it happen ).  
+Its funny that i was writing email to gynvael, telling him what is the solution after i spent long time trying to solve it, while writing the email and trying to explain my effort to gynvael i found that i have a mistake in the condition of the print function ( i kinda excluded all the right cases :$, yea it happen ).  
 
-you can compile my code with: ( you need to install openssl library ( google it ) ).
+You can compile my code with: 
 ```
 gcc -o solve solution.cpp -lcrypto
 ./solve
 ```
-it was fun mission after all. thank you for reading my write up and i hope you find it helpful.  
+( you need to install openssl library ( google it ) ).
+It was fun mission after all. thank you for reading my write up and i hope you find it helpful.  
 
